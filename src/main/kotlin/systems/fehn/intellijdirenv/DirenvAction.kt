@@ -14,10 +14,10 @@ class DirenvAction : AnAction(MyBundle.message("importDirenvAction")) {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val projectDir = project.guessProjectDir() ?: return
+        projectDir.findChild(".envrc") ?: return
 
         val service = service<DirenvService>()
 
-        TODO("Has this project a `.envrc` file?")
         TODO("Is `direnv` in the path?")
     }
 }
