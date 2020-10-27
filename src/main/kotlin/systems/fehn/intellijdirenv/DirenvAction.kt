@@ -6,7 +6,7 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.project.guessProjectDir
 import systems.fehn.intellijdirenv.services.DirenvService
 
-class DirenvAction : AnAction("Import direnv") {
+class DirenvAction : AnAction(MyBundle.message("importDirenvAction")) {
     override fun update(e: AnActionEvent) {
         e.presentation.isEnabledAndVisible = true
     }
