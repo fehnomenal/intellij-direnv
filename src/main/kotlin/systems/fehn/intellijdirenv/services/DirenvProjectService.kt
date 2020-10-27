@@ -19,19 +19,28 @@ class DirenvProjectService(private val project: Project) {
     private val envrcFile = projectDir?.findChild(".envrc")?.takeUnless { it.isDirectory }
 
     private val direnvService = service<DirenvService>()
+    private val envService = service<EnvironmentService>()
 
 
     fun importDirenv() {
         val process = executeDirenv("export", "json") ?: return
 
         val obj = JsonParser().parse(process.inputStream.bufferedReader()) as JsonObject
-        for (name in obj.keySet()) {
-            val value = obj[name]
-            when {
-                value == JsonNull.INSTANCE -> println("- $name")
-                System.getenv(name) == null -> println("+ $name (${value.asString})")
-                else -> println("~ $name (${value.asString})")
+        try {
+            for (name in obj.keySet()) {
+                when (val value = obj[name]) {
+                    JsonNull.INSTANCE -> envService.unsetVariable(name)
+                    else -> envService.setVariable(name, value.asString)
+                }
             }
+        } catch (e: EnvironmentService.ManipulateEnvironmentException) {
+            direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("exceptionNotification"),
+                    e.localizedMessage,
+                    NotificationType.ERROR,
+                    null
+                )
         }
 
         if (process.waitFor() != 0) {
