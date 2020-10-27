@@ -1,19 +1,19 @@
 <idea-plugin>
-    <id>com.github.fehnomenal.intellijdirenv</id>
-    <name>intellij-direnv</name>
-    <vendor>fehnomenal</vendor>
+  <id>systems.fehn.intellijdirenv</id>
+  <name>Direnv integration</name>
+  <vendor>fehnomenal</vendor>
 
-    <!-- Product and plugin compatibility requirements -->
-    <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
-    <depends>com.intellij.modules.platform</depends>
+  <!-- Product and plugin compatibility requirements -->
+  <!-- https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html -->
+  <depends>com.intellij.modules.platform</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.fehnomenal.intellijdirenv.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.fehnomenal.intellijdirenv.services.MyProjectService"/>
-    </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.MyApplicationService"/>
+    <projectService serviceImplementation="systems.fehn.intellijdirenv.services.MyProjectService"/>
+  </extensions>
 
-    <applicationListeners>
-        <listener class="com.github.fehnomenal.intellijdirenv.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
-    </applicationListeners>
+  <applicationListeners>
+    <listener class="systems.fehn.intellijdirenv.listeners.MyProjectManagerListener"
+              topic="com.intellij.openapi.project.ProjectManagerListener"/>
+  </applicationListeners>
 </idea-plugin>

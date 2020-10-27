@@ -1,7 +1,7 @@
-package com.github.fehnomenal.intellijdirenv.services
+package systems.fehn.intellijdirenv.services
 
 import com.intellij.openapi.project.Project
-import com.github.fehnomenal.intellijdirenv.MyBundle
+import systems.fehn.intellijdirenv.MyBundle
 
 class MyProjectService(project: Project) {
 

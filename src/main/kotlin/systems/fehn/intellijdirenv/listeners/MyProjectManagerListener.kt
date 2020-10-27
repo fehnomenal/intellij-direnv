@@ -1,12 +1,13 @@
-package com.github.fehnomenal.intellijdirenv.listeners
+package systems.fehn.intellijdirenv.listeners
 
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
-import com.github.fehnomenal.intellijdirenv.services.MyProjectService
+import systems.fehn.intellijdirenv.services.MyProjectService
 
 internal class MyProjectManagerListener : ProjectManagerListener {
 
     override fun projectOpened(project: Project) {
-        project.getService(MyProjectService::class.java)
+        project.service<MyProjectService>()
     }
 }

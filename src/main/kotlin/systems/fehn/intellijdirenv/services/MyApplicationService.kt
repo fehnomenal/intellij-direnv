@@ -1,6 +1,6 @@
-package com.github.fehnomenal.intellijdirenv.services
+package systems.fehn.intellijdirenv.services
 
-import com.github.fehnomenal.intellijdirenv.MyBundle
+import systems.fehn.intellijdirenv.MyBundle
 
 class MyApplicationService {
 

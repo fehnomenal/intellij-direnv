@@ -1,4 +1,4 @@
-package com.github.fehnomenal.intellijdirenv
+package systems.fehn.intellijdirenv
 
 import com.intellij.AbstractBundle
 import org.jetbrains.annotations.NonNls
