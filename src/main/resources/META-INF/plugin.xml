@@ -8,7 +8,7 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.MyApplicationService"/>
+    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.DirenvService"/>
     <projectService serviceImplementation="systems.fehn.intellijdirenv.services.MyProjectService"/>
   </extensions>
 
@@ -16,4 +16,15 @@
     <listener class="systems.fehn.intellijdirenv.listeners.MyProjectManagerListener"
               topic="com.intellij.openapi.project.ProjectManagerListener"/>
   </applicationListeners>
+
+  <actions>
+    <action id="systems.fehn.intellijdirenv.DirenvAction"
+            class="systems.fehn.intellijdirenv.DirenvAction"
+            text="Import direnv"
+            description="Run direnv and import changes in the environment">
+      <add-to-group group-id="MainToolBar"
+                    anchor="after"
+                    relative-to-action="Synchronize"/>
+    </action>
+  </actions>
 </idea-plugin>
