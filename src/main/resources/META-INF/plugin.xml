@@ -1,4 +1,4 @@
-<idea-plugin>
+<idea-plugin url="https://github.com/fehnomenal/intellij-direnv">
   <id>systems.fehn.intellijdirenv</id>
   <name>Direnv integration</name>
   <vendor>fehnomenal</vendor>
