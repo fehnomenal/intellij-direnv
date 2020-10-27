@@ -17,7 +17,6 @@ class DirenvAction : AnAction(MyBundle.message("importDirenvAction")) {
         projectDir.findChild(".envrc") ?: return
 
         val service = service<DirenvService>()
-
-        TODO("Is `direnv` in the path?")
+        val direnvExecutable = service.direnvExecutable ?: return
     }
 }
