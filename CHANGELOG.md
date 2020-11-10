@@ -3,6 +3,18 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.0.3]
 - Add the official icon and action icon
 
 
