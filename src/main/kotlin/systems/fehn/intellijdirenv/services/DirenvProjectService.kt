@@ -21,7 +21,6 @@ class DirenvProjectService(private val project: Project) {
     private val direnvService = service<DirenvService>()
     private val envService = service<EnvironmentService>()
 
-
     fun importDirenv() {
         val process = executeDirenv("export", "json") ?: return
 
@@ -85,16 +84,15 @@ class DirenvProjectService(private val project: Project) {
         )
     }
 
-
     private fun executeDirenv(vararg args: String): Process? {
-        envrcFile ?: return null
-
-        val command = listOf(
-            direnvService.direnvExecutable?.toString() ?: return null,
-            *args,
-        )
-        return ProcessBuilder(command)
-            .directory(workingDir ?: return null)
-            .start()
+        return envrcFile?.let {
+            workingDir?.let { workingDir ->
+                direnvService.direnvExecutable?.toString()?.let { executable ->
+                    ProcessBuilder(executable, *args)
+                        .directory(workingDir)
+                        .start()
+                }
+            }
+        }
     }
 }

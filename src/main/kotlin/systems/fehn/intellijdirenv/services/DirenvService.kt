@@ -24,6 +24,5 @@ class DirenvService {
             .map { Path.of(it, "direnv") }
             .firstOrNull { Files.exists(it) && Files.isExecutable(it) }
 
-
     val notificationGroup = NotificationGroup.balloonGroup("Direnv")
 }

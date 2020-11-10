@@ -11,9 +11,7 @@ class EnvironmentService {
         modifiableEnvironment[name] = value
     }
 
-
     class ManipulateEnvironmentException(message: String) : Throwable(message)
-
 
     private val modifiableEnvironment by lazy {
         val env = System.getenv()
@@ -43,7 +41,8 @@ class EnvironmentService {
                     "exception.multipleMapFields",
                     cls.canonicalName,
                     Map::class.java.canonicalName,
-                    mapFields.map { it.name })
+                    mapFields.map { it.name }
+                )
             )
         }
 
