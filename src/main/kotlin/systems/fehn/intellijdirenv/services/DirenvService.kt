@@ -3,6 +3,7 @@ package systems.fehn.intellijdirenv.services
 import com.intellij.notification.NotificationGroup
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 class DirenvService {
     private var _direnvExecutable: Path? = null
@@ -21,7 +22,7 @@ class DirenvService {
         System.getenv("PATH")
             .split(':')
             .asSequence()
-            .map { Path.of(it, "direnv") }
+            .map { Paths.get(it, "direnv") }
             .firstOrNull { Files.exists(it) && Files.isExecutable(it) }
 
     val notificationGroup = NotificationGroup.balloonGroup("Direnv")
