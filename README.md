@@ -33,6 +33,10 @@ A button to the right of the `Synchronize` action will start the process.
 
 
 ---
+
+Logo and icon source: https://github.com/direnv/direnv-logo/tree/0949c12bafa532da0b23482a1bb042cf41b654fc
+
+---
 Plugin based on the [IntelliJ Platform Plugin Template][template].
 
 [template]: https://github.com/JetBrains/intellij-platform-plugin-template
