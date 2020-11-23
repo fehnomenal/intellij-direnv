@@ -108,7 +108,9 @@ class DirenvProjectService(private val project: Project) {
                     NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
                         it.hideBalloon()
 
-                        FileEditorManager.getInstance(project).openFile(envrcFile!!, true, true)
+                        envrcFile?.let {
+                            FileEditorManager.getInstance(project).openFile(it, true, true)
+                        }
                     },
                 ),
             project,
