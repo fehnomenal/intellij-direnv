@@ -116,14 +116,14 @@ class DirenvProjectService(private val project: Project) {
     }
 
     private fun executeDirenv(vararg args: String): Process? {
-        return envrcFile?.let {
-            workingDir?.let { workingDir ->
-                direnvService.direnvExecutable?.toString()?.let { executable ->
-                    ProcessBuilder(executable, *args)
-                        .directory(workingDir)
-                        .start()
-                }
-            }
+        if (!hasEnvrcFile() || workingDir == null) {
+            return null
+        }
+
+        return direnvService.direnvExecutable?.let { executable ->
+            ProcessBuilder(executable.toString(), *args)
+                .directory(workingDir)
+                .start()
         }
     }
 }
