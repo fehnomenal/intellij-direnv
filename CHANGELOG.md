@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Added
 - On project load a popup suggests importing from direnv
+- Document that only top-level `envrc` files are handled
 
 ### Changed
 

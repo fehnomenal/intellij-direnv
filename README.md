@@ -12,6 +12,8 @@ A button next to the `Reload All from Disk` action will start the process.
 
 ![action-icon](https://user-images.githubusercontent.com/9959940/98688979-b6c88700-236b-11eb-8e27-319f23376212.png)
 
+**Note**: This plugin handles only `.envrc` files in the project root.
+
 <!-- Plugin description end -->
 
 ## Installation
