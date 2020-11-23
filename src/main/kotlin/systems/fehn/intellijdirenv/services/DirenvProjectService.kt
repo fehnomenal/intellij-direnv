@@ -7,19 +7,33 @@ import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.logger
+import com.intellij.openapi.diagnostic.trace
 import com.intellij.openapi.fileEditor.FileEditorManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
+import com.intellij.openapi.vfs.VirtualFile
 import systems.fehn.intellijdirenv.MyBundle
+import systems.fehn.intellijdirenv.switchNull
 import java.io.File
 
 class DirenvProjectService(private val project: Project) {
-    private val projectDir = project.guessProjectDir()
-    private val workingDir = projectDir?.let { File(it.path) }
-    private val envrcFile = projectDir?.findChild(".envrc")?.takeUnless { it.isDirectory }
+    private val logger by lazy { logger<DirenvProjectService>() }
 
-    private val direnvService = service<DirenvService>()
-    private val envService = service<EnvironmentService>()
+    private val projectDir = project.guessProjectDir()
+        .switchNull(
+            onNull = { logger.warn("Could not determine project dir of project ${project.name}") },
+        )
+    private val workingDir by lazy { projectDir?.let { File(it.path) } }
+    private val envrcFile: VirtualFile?
+        get() = projectDir?.findChild(".envrc")?.takeUnless { it.isDirectory }
+            .switchNull(
+                onNull = { logger.trace { "Project ${project.name} contains no .envrc file" } },
+                onNonNull = { logger.trace { "Project ${project.name} has .envrc file ${it.path}" } },
+            )
+
+    private val direnvService by lazy { service<DirenvService>() }
+    private val envService by lazy { service<EnvironmentService>() }
 
     fun hasEnvrcFile() = envrcFile != null
 
@@ -33,54 +47,69 @@ class DirenvProjectService(private val project: Project) {
                     JsonNull.INSTANCE -> envService.unsetVariable(name)
                     else -> envService.setVariable(name, value.asString)
                 }
+
+                logger.trace { "Set variable $name to ${obj[name]}" }
             }
         } catch (e: EnvironmentService.ManipulateEnvironmentException) {
-            direnvService.notificationGroup
+            val notification = direnvService.notificationGroup
                 .createNotification(
                     MyBundle.message("exceptionNotification"),
                     e.localizedMessage,
                     NotificationType.ERROR,
-                    null
+                    null,
                 )
+
+            Notifications.Bus.notify(notification, project)
         }
 
         if (process.waitFor() != 0) {
-            return handleDirenvError(process)
+            handleDirenvError(process)
+        } else {
+            val notification = direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("executedSuccessfully"),
+                    NotificationType.INFORMATION,
+                )
+
+            Notifications.Bus.notify(notification, project)
         }
     }
 
     private fun handleDirenvError(process: Process) {
-        val not =
-            if (process.errorStream.bufferedReader().readText().contains(" is blocked")) {
-                direnvService.notificationGroup
-                    .createNotification(
-                        MyBundle.message("envrcNotYetAllowed"),
-                        NotificationType.WARNING,
-                    )
-                    .addAction(
-                        NotificationAction.create(MyBundle.message("allow")) { _, notification ->
-                            notification.hideBalloon()
-                            (executeDirenv("allow") ?: return@create).waitFor()
+        val error = process.errorStream.bufferedReader().readText()
 
-                            importDirenv()
-                        }
-                    )
-            } else {
-                direnvService.notificationGroup
-                    .createNotification(
-                        MyBundle.message("errorDuringDirenv"),
-                        NotificationType.ERROR,
-                    )
-            }
+        val notification = if (error.contains(" is blocked")) {
+            direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("envrcNotYetAllowed"),
+                    NotificationType.WARNING,
+                )
+                .addAction(
+                    NotificationAction.create(MyBundle.message("allow")) { _, notification ->
+                        notification.hideBalloon()
+                        (executeDirenv("allow") ?: return@create).waitFor()
+
+                        importDirenv()
+                    },
+                )
+        } else {
+            logger.error(error)
+
+            direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("errorDuringDirenv"),
+                    NotificationType.ERROR,
+                )
+        }
 
         Notifications.Bus.notify(
-            not
+            notification
                 .addAction(
-                    NotificationAction.create(MyBundle.message("openEnvrc")) { _, notification ->
-                        notification.hideBalloon()
+                    NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
+                        it.hideBalloon()
 
                         FileEditorManager.getInstance(project).openFile(envrcFile!!, true, true)
-                    }
+                    },
                 ),
             project,
         )

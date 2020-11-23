@@ -6,6 +6,7 @@
 ### Added
 - On project load a popup suggests importing from direnv
 - Document that only top-level `envrc` files are handled
+- Provide more feedback over the direnv import
 
 ### Changed
 
