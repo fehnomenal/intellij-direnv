@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- On project load a popup suggests importing from direnv
 
 ### Changed
 

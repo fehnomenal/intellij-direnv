@@ -21,6 +21,8 @@ class DirenvProjectService(private val project: Project) {
     private val direnvService = service<DirenvService>()
     private val envService = service<EnvironmentService>()
 
+    fun hasEnvrcFile() = envrcFile != null
+
     fun importDirenv() {
         val process = executeDirenv("export", "json") ?: return
 
