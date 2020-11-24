@@ -29,6 +29,29 @@ A button next to the `Reload All from Disk` action will start the process.
   <kbd>Preferences</kbd> > <kbd>Plugins</kbd> > <kbd>⚙️</kbd> > <kbd>Install plugin from disk...</kbd>
 
 
+## Building from source
+
+```shell script
+git clone https://github.com/fehnomenal/intellij-direnv
+cd intellij-direnv
+./gradlew buildPlugin
+```
+
+The plugin is now in the folder `build/distributions/` and can be installed manually.
+
+
+##### On NixOS
+
+The gradle plugins downloads JetBrains' JRE and fails to execute it.
+Add the following in `build.gradle.kts`:
+```kotlin
+tasks.withType<org.jetbrains.intellij.tasks.RunIdeBase> {
+    conventionMapping("executable") {
+        org.gradle.internal.jvm.Jvm.current().javaExecutable.absolutePath
+    }
+}
+```
+
 ---
 
 Logo and icon source: https://github.com/direnv/direnv-logo/tree/0949c12bafa532da0b23482a1bb042cf41b654fc
