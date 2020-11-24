@@ -7,6 +7,7 @@ import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import com.intellij.openapi.components.service
+import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -41,39 +42,55 @@ class DirenvProjectService(private val project: Project) {
     fun importDirenv(executable: Path) {
         val process = executeDirenv(executable, "export", "json")
 
-        val obj = JsonParser().parse(process.inputStream.bufferedReader()) as JsonObject
-        try {
-            for (name in obj.keySet()) {
-                when (val value = obj[name]) {
-                    JsonNull.INSTANCE -> envService.unsetVariable(name)
-                    else -> envService.setVariable(name, value.asString)
-                }
-
-                logger.trace { "Set variable $name to ${obj[name]}" }
-            }
-        } catch (e: EnvironmentService.ManipulateEnvironmentException) {
-            val notification = direnvService.notificationGroup
-                .createNotification(
-                    MyBundle.message("exceptionNotification"),
-                    e.localizedMessage,
-                    NotificationType.ERROR,
-                    null,
-                )
-
-            Notifications.Bus.notify(notification, project)
-        }
-
         if (process.waitFor() != 0) {
             handleDirenvError(executable, process)
-        } else {
-            val notification = direnvService.notificationGroup
+            return
+        }
+
+        val jsonElement = JsonParser().parse(process.inputStream.bufferedReader())
+        val notification = if (jsonElement == JsonNull.INSTANCE) {
+            direnvService.notificationGroup
                 .createNotification(
-                    MyBundle.message("executedSuccessfully"),
+                    MyBundle.message("alreadyUpToDate"),
                     NotificationType.INFORMATION,
                 )
+        } else {
+            logger.debug { process.errorStream.bufferedReader().readText() }
 
-            Notifications.Bus.notify(notification, project)
+            val obj = if (jsonElement !is JsonObject) {
+                logger.debug { "Parsed JSON was neither null nor an object: $jsonElement" }
+                JsonObject()
+            } else {
+                jsonElement
+            }
+
+            try {
+                for (name in obj.keySet()) {
+                    when (val value = obj[name]) {
+                        JsonNull.INSTANCE -> envService.unsetVariable(name)
+                        else -> envService.setVariable(name, value.asString)
+                    }
+
+                    logger.trace { "Set variable $name to ${obj[name]}" }
+                }
+
+                direnvService.notificationGroup
+                    .createNotification(
+                        MyBundle.message("executedSuccessfully"),
+                        NotificationType.INFORMATION,
+                    )
+            } catch (e: EnvironmentService.ManipulateEnvironmentException) {
+                direnvService.notificationGroup
+                    .createNotification(
+                        MyBundle.message("exceptionNotification"),
+                        e.localizedMessage,
+                        NotificationType.ERROR,
+                        null,
+                    )
+            }
         }
+
+        Notifications.Bus.notify(notification, project)
     }
 
     private fun handleDirenvError(executable: Path, process: Process) {
@@ -118,8 +135,11 @@ class DirenvProjectService(private val project: Project) {
         )
     }
 
-    private fun executeDirenv(executable: Path, vararg args: String): Process =
-        ProcessBuilder(executable.toString(), *args)
-            .directory(workingDir)
-            .start()
+    private fun executeDirenv(executable: Path, vararg args: String): Process {
+        val processBuilder = ProcessBuilder(executable.toString(), *args).directory(workingDir)
+
+        processBuilder.environment()
+
+        return processBuilder.start()
+    }
 }

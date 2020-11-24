@@ -16,6 +16,7 @@
 ### Removed
 
 ### Fixed
+- Changed environment is propagated correctly to direnv
 
 ### Security
 ## [0.0.3]
