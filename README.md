@@ -14,6 +14,8 @@ A button next to the `Reload All from Disk` action will start the process.
 
 **Note**: This plugin handles only `.envrc` files in the project root.
 
+**Note**: You need `direnv` in your path.
+
 <!-- Plugin description end -->
 
 ## Installation
