@@ -5,10 +5,11 @@
 ## [Unreleased]
 ### Added
 - On project load a popup suggests importing from direnv
-- Document that only top-level `envrc` files are handled
+- Document that only top-level `.envrc` files are handled
 - Provide more feedback over the direnv import
 
 ### Changed
+- Action is only available if `direnv` is in path, and the project contains a `.envrc` file
 
 ### Deprecated
 

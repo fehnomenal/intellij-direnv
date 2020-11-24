@@ -1,7 +1,6 @@
 package systems.fehn.intellijdirenv.services
 
 import com.intellij.notification.NotificationGroup
-import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
 import systems.fehn.intellijdirenv.switchNull
@@ -19,7 +18,7 @@ class DirenvService {
             .map { Paths.get(it, "direnv") }
             .firstOrNull { Files.exists(it) && Files.isExecutable(it) }
             .switchNull(
-                onNull = { logger.debug { "Did not find direnv executable in path" } },
+                onNull = { logger.trace { "Did not find direnv executable in path" } },
                 onNonNull = { logger.trace { "Found direnv executable in $it" } },
             )
 

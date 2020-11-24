@@ -31,8 +31,8 @@ internal class MyProjectManagerListener : ProjectManagerListener {
                         NotificationAction.create(MyBundle.message("importDirenvAction")) { _, notification ->
                             notification.hideBalloon()
 
-                            projectService.importDirenv()
-                        }
+                            projectService.importDirenv(executable)
+                        },
                     )
 
                 Notifications.Bus.notify(notification, project)

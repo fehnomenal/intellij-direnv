@@ -16,6 +16,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import systems.fehn.intellijdirenv.MyBundle
 import systems.fehn.intellijdirenv.switchNull
 import java.io.File
+import java.nio.file.Path
 
 class DirenvProjectService(private val project: Project) {
     private val logger by lazy { logger<DirenvProjectService>() }
@@ -37,8 +38,8 @@ class DirenvProjectService(private val project: Project) {
 
     fun hasEnvrcFile() = envrcFile != null
 
-    fun importDirenv() {
-        val process = executeDirenv("export", "json") ?: return
+    fun importDirenv(executable: Path) {
+        val process = executeDirenv(executable, "export", "json")
 
         val obj = JsonParser().parse(process.inputStream.bufferedReader()) as JsonObject
         try {
@@ -63,7 +64,7 @@ class DirenvProjectService(private val project: Project) {
         }
 
         if (process.waitFor() != 0) {
-            handleDirenvError(process)
+            handleDirenvError(executable, process)
         } else {
             val notification = direnvService.notificationGroup
                 .createNotification(
@@ -75,7 +76,7 @@ class DirenvProjectService(private val project: Project) {
         }
     }
 
-    private fun handleDirenvError(process: Process) {
+    private fun handleDirenvError(executable: Path, process: Process) {
         val error = process.errorStream.bufferedReader().readText()
 
         val notification = if (error.contains(" is blocked")) {
@@ -87,9 +88,9 @@ class DirenvProjectService(private val project: Project) {
                 .addAction(
                     NotificationAction.create(MyBundle.message("allow")) { _, notification ->
                         notification.hideBalloon()
-                        (executeDirenv("allow") ?: return@create).waitFor()
+                        executeDirenv(executable, "allow").waitFor()
 
-                        importDirenv()
+                        importDirenv(executable)
                     },
                 )
         } else {
@@ -117,15 +118,8 @@ class DirenvProjectService(private val project: Project) {
         )
     }
 
-    private fun executeDirenv(vararg args: String): Process? {
-        if (!hasEnvrcFile() || workingDir == null) {
-            return null
-        }
-
-        return direnvService.direnvExecutable?.let { executable ->
-            ProcessBuilder(executable.toString(), *args)
-                .directory(workingDir)
-                .start()
-        }
-    }
+    private fun executeDirenv(executable: Path, vararg args: String): Process =
+        ProcessBuilder(executable.toString(), *args)
+            .directory(workingDir)
+            .start()
 }
