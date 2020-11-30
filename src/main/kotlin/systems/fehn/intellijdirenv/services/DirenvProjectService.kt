@@ -49,46 +49,49 @@ class DirenvProjectService(private val project: Project) {
         }
 
         val jsonElement = JsonParser().parse(process.inputStream.bufferedReader())
-        val notification = if (jsonElement == JsonNull.INSTANCE) {
-            direnvService.notificationGroup
+        if (jsonElement == JsonNull.INSTANCE) {
+            val notification = direnvService.notificationGroup
                 .createNotification(
                     MyBundle.message("alreadyUpToDate"),
                     NotificationType.INFORMATION,
                 )
+
+            Notifications.Bus.notify(notification, project)
+            return
+        }
+
+        logger.debug { process.errorStream.bufferedReader().readText() }
+
+        val obj = if (jsonElement !is JsonObject) {
+            logger.debug { "Parsed JSON was neither null nor an object: $jsonElement" }
+            JsonObject()
         } else {
-            logger.debug { process.errorStream.bufferedReader().readText() }
+            jsonElement
+        }
 
-            val obj = if (jsonElement !is JsonObject) {
-                logger.debug { "Parsed JSON was neither null nor an object: $jsonElement" }
-                JsonObject()
-            } else {
-                jsonElement
-            }
-
-            try {
-                for (name in obj.keySet()) {
-                    when (val value = obj[name]) {
-                        JsonNull.INSTANCE -> envService.unsetVariable(name)
-                        else -> envService.setVariable(name, value.asString)
-                    }
-
-                    logger.trace { "Set variable $name to ${obj[name]}" }
+        val notification = try {
+            for (name in obj.keySet()) {
+                when (val value = obj[name]) {
+                    JsonNull.INSTANCE -> envService.unsetVariable(name)
+                    else -> envService.setVariable(name, value.asString)
                 }
 
-                direnvService.notificationGroup
-                    .createNotification(
-                        MyBundle.message("executedSuccessfully"),
-                        NotificationType.INFORMATION,
-                    )
-            } catch (e: EnvironmentService.ManipulateEnvironmentException) {
-                direnvService.notificationGroup
-                    .createNotification(
-                        MyBundle.message("exceptionNotification"),
-                        e.localizedMessage,
-                        NotificationType.ERROR,
-                        null,
-                    )
+                logger.trace { "Set variable $name to ${obj[name]}" }
             }
+
+            direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("executedSuccessfully"),
+                    NotificationType.INFORMATION,
+                )
+        } catch (e: EnvironmentService.ManipulateEnvironmentException) {
+            direnvService.notificationGroup
+                .createNotification(
+                    MyBundle.message("exceptionNotification"),
+                    e.localizedMessage,
+                    NotificationType.ERROR,
+                    null,
+                )
         }
 
         Notifications.Bus.notify(notification, project)
