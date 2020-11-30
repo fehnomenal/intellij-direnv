@@ -3,6 +3,7 @@ package systems.fehn.intellijdirenv.services
 import com.google.gson.JsonNull
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
@@ -136,10 +137,8 @@ class DirenvProjectService(private val project: Project) {
     }
 
     private fun executeDirenv(executable: Path, vararg args: String): Process {
-        val processBuilder = ProcessBuilder(executable.toString(), *args).directory(workingDir)
-
-        processBuilder.environment()
-
-        return processBuilder.start()
+        return GeneralCommandLine(executable.toString(), *args)
+            .withWorkDirectory(workingDir)
+            .createProcess()
     }
 }
