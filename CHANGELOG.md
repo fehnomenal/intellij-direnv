@@ -4,6 +4,18 @@
 
 ## [Unreleased]
 ### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.1.0]
+### Added
 - On project load a popup suggests importing from direnv
 - Document that only top-level `.envrc` files are handled
 - Provide more feedback over the direnv import
