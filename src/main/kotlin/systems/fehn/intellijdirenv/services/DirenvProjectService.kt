@@ -16,9 +16,9 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
 import systems.fehn.intellijdirenv.MyBundle
+import systems.fehn.intellijdirenv.notificationGroup
 import systems.fehn.intellijdirenv.switchNull
 import java.io.File
-import java.nio.file.Path
 
 class DirenvProjectService(private val project: Project) {
     private val logger by lazy { logger<DirenvProjectService>() }
@@ -35,22 +35,21 @@ class DirenvProjectService(private val project: Project) {
                 onNonNull = { logger.trace { "Project ${project.name} has .envrc file ${it.path}" } },
             )
 
-    private val direnvService by lazy { service<DirenvService>() }
     private val envService by lazy { service<EnvironmentService>() }
 
     fun hasEnvrcFile() = envrcFile != null
 
-    fun importDirenv(executable: Path) {
-        val process = executeDirenv(executable, "export", "json")
+    fun importDirenv() {
+        val process = executeDirenv("export", "json")
 
         if (process.waitFor() != 0) {
-            handleDirenvError(executable, process)
+            handleDirenvError(process)
             return
         }
 
         val jsonElement = JsonParser().parse(process.inputStream.bufferedReader())
         if (jsonElement == JsonNull.INSTANCE) {
-            val notification = direnvService.notificationGroup
+            val notification = notificationGroup
                 .createNotification(
                     MyBundle.message("alreadyUpToDate"),
                     NotificationType.INFORMATION,
@@ -79,13 +78,13 @@ class DirenvProjectService(private val project: Project) {
                 logger.trace { "Set variable $name to ${obj[name]}" }
             }
 
-            direnvService.notificationGroup
+            notificationGroup
                 .createNotification(
                     MyBundle.message("executedSuccessfully"),
                     NotificationType.INFORMATION,
                 )
         } catch (e: EnvironmentService.ManipulateEnvironmentException) {
-            direnvService.notificationGroup
+            notificationGroup
                 .createNotification(
                     MyBundle.message("exceptionNotification"),
                     e.localizedMessage,
@@ -97,11 +96,11 @@ class DirenvProjectService(private val project: Project) {
         Notifications.Bus.notify(notification, project)
     }
 
-    private fun handleDirenvError(executable: Path, process: Process) {
+    private fun handleDirenvError(process: Process) {
         val error = process.errorStream.bufferedReader().readText()
 
         val notification = if (error.contains(" is blocked")) {
-            direnvService.notificationGroup
+            notificationGroup
                 .createNotification(
                     MyBundle.message("envrcNotYetAllowed"),
                     NotificationType.WARNING,
@@ -109,15 +108,15 @@ class DirenvProjectService(private val project: Project) {
                 .addAction(
                     NotificationAction.create(MyBundle.message("allow")) { _, notification ->
                         notification.hideBalloon()
-                        executeDirenv(executable, "allow").waitFor()
+                        executeDirenv("allow").waitFor()
 
-                        importDirenv(executable)
+                        importDirenv()
                     },
                 )
         } else {
             logger.error(error)
 
-            direnvService.notificationGroup
+            notificationGroup
                 .createNotification(
                     MyBundle.message("errorDuringDirenv"),
                     NotificationType.ERROR,
@@ -139,8 +138,8 @@ class DirenvProjectService(private val project: Project) {
         )
     }
 
-    private fun executeDirenv(executable: Path, vararg args: String): Process {
-        return GeneralCommandLine(executable.toString(), *args)
+    private fun executeDirenv(vararg args: String): Process {
+        return GeneralCommandLine("direnv", *args)
             .withWorkDirectory(workingDir)
             .createProcess()
     }

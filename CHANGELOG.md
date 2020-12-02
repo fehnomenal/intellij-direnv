@@ -6,6 +6,7 @@
 ### Added
 
 ### Changed
+- The `direnv` executable is no longer looked up in `PATH`. Instead, Java is responsible for this.
 
 ### Deprecated
 
