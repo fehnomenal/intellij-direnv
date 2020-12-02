@@ -3,7 +3,6 @@ package systems.fehn.intellijdirenv.listeners
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
-import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.project.ProjectManagerListener
@@ -17,7 +16,7 @@ internal class MyProjectManagerListener : ProjectManagerListener {
     override fun projectOpened(project: Project) {
         logger.trace("Opened project ${project.name}")
 
-        val projectService = project.service<DirenvProjectService>()
+        val projectService = project.getService(DirenvProjectService::class.java)
 
         if (projectService.hasEnvrcFile()) {
             val notification = notificationGroup

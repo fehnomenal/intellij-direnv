@@ -7,7 +7,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
-import com.intellij.openapi.components.service
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
@@ -35,7 +35,7 @@ class DirenvProjectService(private val project: Project) {
                 onNonNull = { logger.trace { "Project ${project.name} has .envrc file ${it.path}" } },
             )
 
-    private val envService by lazy { service<EnvironmentService>() }
+    private val envService by lazy { ApplicationManager.getApplication().getService(EnvironmentService::class.java) }
 
     fun hasEnvrcFile() = envrcFile != null
 
