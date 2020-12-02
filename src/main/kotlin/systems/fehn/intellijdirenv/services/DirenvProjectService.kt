@@ -1,14 +1,13 @@
 package systems.fehn.intellijdirenv.services
 
-import com.google.gson.JsonNull
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.notification.Notifications
 import com.intellij.openapi.application.ApplicationManager
-import com.intellij.openapi.diagnostic.debug
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -37,6 +36,8 @@ class DirenvProjectService(private val project: Project) {
 
     private val envService by lazy { ApplicationManager.getApplication().getService(EnvironmentService::class.java) }
 
+    private val jsonFactory by lazy { JsonFactory() }
+
     fun hasEnvrcFile() = envrcFile != null
 
     fun importDirenv() {
@@ -47,53 +48,56 @@ class DirenvProjectService(private val project: Project) {
             return
         }
 
-        val jsonElement = JsonParser().parse(process.inputStream.bufferedReader())
-        if (jsonElement == JsonNull.INSTANCE) {
-            val notification = notificationGroup
-                .createNotification(
-                    MyBundle.message("alreadyUpToDate"),
-                    NotificationType.INFORMATION,
-                )
+        val notification = jsonFactory.createParser(process.inputStream).use { parser ->
 
-            Notifications.Bus.notify(notification, project)
-            return
-        }
+            try {
+                val didWork = handleDirenvOutput(parser)
 
-        logger.debug { process.errorStream.bufferedReader().readText() }
-
-        val obj = if (jsonElement !is JsonObject) {
-            logger.debug { "Parsed JSON was neither null nor an object: $jsonElement" }
-            JsonObject()
-        } else {
-            jsonElement
-        }
-
-        val notification = try {
-            for (name in obj.keySet()) {
-                when (val value = obj[name]) {
-                    JsonNull.INSTANCE -> envService.unsetVariable(name)
-                    else -> envService.setVariable(name, value.asString)
+                if (didWork) {
+                    notificationGroup
+                        .createNotification(
+                            MyBundle.message("executedSuccessfully"),
+                            NotificationType.INFORMATION,
+                        )
+                } else {
+                    notificationGroup
+                        .createNotification(
+                            MyBundle.message("alreadyUpToDate"),
+                            NotificationType.INFORMATION,
+                        )
                 }
-
-                logger.trace { "Set variable $name to ${obj[name]}" }
+            } catch (e: EnvironmentService.ManipulateEnvironmentException) {
+                notificationGroup
+                    .createNotification(
+                        MyBundle.message("exceptionNotification"),
+                        e.localizedMessage,
+                        NotificationType.ERROR,
+                        null,
+                    )
             }
-
-            notificationGroup
-                .createNotification(
-                    MyBundle.message("executedSuccessfully"),
-                    NotificationType.INFORMATION,
-                )
-        } catch (e: EnvironmentService.ManipulateEnvironmentException) {
-            notificationGroup
-                .createNotification(
-                    MyBundle.message("exceptionNotification"),
-                    e.localizedMessage,
-                    NotificationType.ERROR,
-                    null,
-                )
         }
 
         Notifications.Bus.notify(notification, project)
+    }
+
+    private fun handleDirenvOutput(parser: JsonParser): Boolean {
+        var didWork = false
+
+        while (parser.nextToken() != null) {
+            if (parser.currentToken == JsonToken.FIELD_NAME) {
+                when (parser.nextToken()) {
+                    JsonToken.VALUE_NULL -> envService.unsetVariable(parser.currentName)
+                    JsonToken.VALUE_STRING -> envService.setVariable(parser.currentName, parser.valueAsString)
+
+                    else -> continue
+                }
+
+                didWork = true
+                logger.trace { "Set variable ${parser.currentName} to ${parser.valueAsString}" }
+            }
+        }
+
+        return didWork
     }
 
     private fun handleDirenvError(process: Process) {
