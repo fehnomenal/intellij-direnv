@@ -3,30 +3,14 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
-### Added
-
 ### Changed
+- Version range now includes 2020.4
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.1.1]
-### Added
 
 ### Changed
 - The `direnv` executable is no longer looked up in `PATH`. Instead, Java is responsible for this.
 
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 ## [0.1.0]
 ### Added
 - On project load a popup suggests importing from direnv
@@ -35,10 +19,6 @@
 
 ### Changed
 - Action is only available if `direnv` is in path, and the project contains a `.envrc` file
-
-### Deprecated
-
-### Removed
 
 ### Fixed
 - Changed environment is propagated correctly to direnv
