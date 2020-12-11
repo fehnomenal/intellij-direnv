@@ -3,6 +3,18 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+## [0.1.3]
 ### Changed
 - Remove 2019.3 due to compatibility problems
 
