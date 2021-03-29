@@ -17,7 +17,6 @@ import com.intellij.openapi.vfs.VirtualFile
 import systems.fehn.intellijdirenv.MyBundle
 import systems.fehn.intellijdirenv.notificationGroup
 import systems.fehn.intellijdirenv.switchNull
-import java.io.File
 
 class DirenvProjectService(private val project: Project) {
     private val logger by lazy { logger<DirenvProjectService>() }
@@ -26,8 +25,8 @@ class DirenvProjectService(private val project: Project) {
         .switchNull(
             onNull = { logger.warn("Could not determine project dir of project ${project.name}") },
         )
-    private val workingDir by lazy { projectDir?.let { File(it.path) } }
-    private val envrcFile: VirtualFile?
+
+    val projectEnvrcFile: VirtualFile?
         get() = projectDir?.findChild(".envrc")?.takeUnless { it.isDirectory }
             .switchNull(
                 onNull = { logger.trace { "Project ${project.name} contains no .envrc file" } },
@@ -38,13 +37,11 @@ class DirenvProjectService(private val project: Project) {
 
     private val jsonFactory by lazy { JsonFactory() }
 
-    fun hasTopLevelEnvrcFile() = envrcFile != null
-
-    fun importDirenv(pathToEnvRc: String?) {
-        val process = executeDirenv(pathToEnvRc, "export", "json")
+    fun importDirenv(envrcFile: VirtualFile) {
+        val process = executeDirenv(envrcFile, "export", "json")
 
         if (process.waitFor() != 0) {
-            handleDirenvError(process, pathToEnvRc)
+            handleDirenvError(process, envrcFile)
             return
         }
 
@@ -100,7 +97,7 @@ class DirenvProjectService(private val project: Project) {
         return didWork
     }
 
-    private fun handleDirenvError(process: Process, pathToEnvRc: String?) {
+    private fun handleDirenvError(process: Process, envrcFile: VirtualFile) {
         val error = process.errorStream.bufferedReader().readText()
 
         val notification = if (error.contains(" is blocked")) {
@@ -112,9 +109,9 @@ class DirenvProjectService(private val project: Project) {
                 .addAction(
                     NotificationAction.create(MyBundle.message("allow")) { _, notification ->
                         notification.hideBalloon()
-                        executeDirenv(pathToEnvRc, "allow").waitFor()
+                        executeDirenv(envrcFile, "allow").waitFor()
 
-                        importDirenv(pathToEnvRc)
+                        importDirenv(envrcFile)
                     },
                 )
         } else {
@@ -133,18 +130,18 @@ class DirenvProjectService(private val project: Project) {
                     NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
                         it.hideBalloon()
 
-                        envrcFile?.let {
-                            FileEditorManager.getInstance(project).openFile(it, true, true)
-                        }
+                        FileEditorManager.getInstance(project).openFile(envrcFile, true, true)
                     },
                 ),
             project,
         )
     }
 
-    private fun executeDirenv(pathToEnvRc: String?, vararg args: String): Process {
+    private fun executeDirenv(envrcFile: VirtualFile, vararg args: String): Process {
+        val workingDir = envrcFile.parent.path
+
         return GeneralCommandLine("direnv", *args)
-            .withWorkDirectory(pathToEnvRc?.let { File(pathToEnvRc).parentFile } ?: workingDir)
+            .withWorkDirectory(workingDir)
             .createProcess()
     }
 }

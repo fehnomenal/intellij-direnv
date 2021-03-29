@@ -4,6 +4,7 @@
 
 ## [Unreleased]
 ### Added
+- Allow importing non-toplevel `.envrc` files
 
 ### Changed
 - Toolbar action is always visible and enabled
