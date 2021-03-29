@@ -38,13 +38,13 @@ class DirenvProjectService(private val project: Project) {
 
     private val jsonFactory by lazy { JsonFactory() }
 
-    fun hasEnvrcFile() = envrcFile != null
+    fun hasTopLevelEnvrcFile() = envrcFile != null
 
-    fun importDirenv() {
-        val process = executeDirenv("export", "json")
+    fun importDirenv(pathToEnvRc: String?) {
+        val process = executeDirenv(pathToEnvRc, "export", "json")
 
         if (process.waitFor() != 0) {
-            handleDirenvError(process)
+            handleDirenvError(process, pathToEnvRc)
             return
         }
 
@@ -100,7 +100,7 @@ class DirenvProjectService(private val project: Project) {
         return didWork
     }
 
-    private fun handleDirenvError(process: Process) {
+    private fun handleDirenvError(process: Process, pathToEnvRc: String?) {
         val error = process.errorStream.bufferedReader().readText()
 
         val notification = if (error.contains(" is blocked")) {
@@ -112,9 +112,9 @@ class DirenvProjectService(private val project: Project) {
                 .addAction(
                     NotificationAction.create(MyBundle.message("allow")) { _, notification ->
                         notification.hideBalloon()
-                        executeDirenv("allow").waitFor()
+                        executeDirenv(pathToEnvRc, "allow").waitFor()
 
-                        importDirenv()
+                        importDirenv(pathToEnvRc)
                     },
                 )
         } else {
@@ -142,9 +142,9 @@ class DirenvProjectService(private val project: Project) {
         )
     }
 
-    private fun executeDirenv(vararg args: String): Process {
+    private fun executeDirenv(pathToEnvRc: String?, vararg args: String): Process {
         return GeneralCommandLine("direnv", *args)
-            .withWorkDirectory(workingDir)
+            .withWorkDirectory(pathToEnvRc?.let { File(pathToEnvRc).parentFile } ?: workingDir)
             .createProcess()
     }
 }

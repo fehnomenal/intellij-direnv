@@ -18,7 +18,7 @@ internal class MyProjectManagerListener : ProjectManagerListener {
 
         val projectService = project.getService(DirenvProjectService::class.java)
 
-        if (projectService.hasEnvrcFile()) {
+        if (projectService.hasTopLevelEnvrcFile()) {
             val notification = notificationGroup
                 .createNotification(
                     MyBundle.message("envrcFileFound"),
@@ -28,7 +28,7 @@ internal class MyProjectManagerListener : ProjectManagerListener {
                     NotificationAction.create(MyBundle.message("importDirenvAction")) { _, notification ->
                         notification.hideBalloon()
 
-                        projectService.importDirenv()
+                        projectService.importDirenv(null)
                     },
                 )
 

@@ -6,6 +6,7 @@
 ### Added
 
 ### Changed
+- Toolbar action is always visible and enabled
 
 ### Deprecated
 
@@ -14,6 +15,7 @@
 ### Fixed
 
 ### Security
+
 ## [0.1.3]
 ### Changed
 - Remove 2019.3 due to compatibility problems

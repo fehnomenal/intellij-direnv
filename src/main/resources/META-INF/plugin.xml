@@ -18,8 +18,8 @@
   </applicationListeners>
 
   <actions>
-    <action id="systems.fehn.intellijdirenv.DirenvAction"
-            class="systems.fehn.intellijdirenv.DirenvAction"
+    <action id="systems.fehn.intellijdirenv.DirenvToolBarAction"
+            class="systems.fehn.intellijdirenv.DirenvToolBarAction"
             text="Import direnv"
             description="Run direnv and import changes in the environment"
             icon="/META-INF/actionIcon.png">
