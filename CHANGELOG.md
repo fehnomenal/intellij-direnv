@@ -3,6 +3,9 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Changed
+- Make compatible with 2021.1
+
 ## [0.2.0]
 ### Added
 - Allow importing non-toplevel `.envrc` files
