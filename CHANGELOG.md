@@ -3,6 +3,9 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Changed
+- Make compatible with 2021.2
+
 ## [0.2.1]
 ### Changed
 - Make compatible with 2021.1
