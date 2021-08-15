@@ -5,6 +5,7 @@
 ## [Unreleased]
 ### Changed
 - Make compatible with 2021.2
+- Apply changes from template v0.10.1
 
 ## [0.2.1]
 ### Changed
