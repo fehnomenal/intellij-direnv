@@ -5,7 +5,7 @@
 ## [Unreleased]
 ## [0.2.3]
 ### Changed
-- Make compatible with 2021.2
+- Make compatible with 2021.3.1
 
 ## [0.2.2]
 ### Changed
