@@ -3,6 +3,8 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Changed
+- Make compatible with 2ß22.1
 
 ## [0.2.3]
 ### Changed
@@ -23,14 +25,6 @@
 
 ### Changed
 - Toolbar action is always visible and enabled
-
-### Deprecated
-
-### Removed
-
-### Fixed
-
-### Security
 
 ## [0.1.3]
 ### Changed
