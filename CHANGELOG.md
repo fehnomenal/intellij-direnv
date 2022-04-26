@@ -4,7 +4,7 @@
 
 ## [Unreleased]
 ### Changed
-- Make compatible with 2ß22.1
+- Make compatible with 2022.1
 
 ## [0.2.3]
 ### Changed
