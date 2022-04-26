@@ -3,6 +3,7 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+## [0.2.4]
 ### Changed
 - Make compatible with 2022.1
 
