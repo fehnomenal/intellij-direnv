@@ -70,7 +70,6 @@ class DirenvProjectService(private val project: Project) {
                         MyBundle.message("exceptionNotification"),
                         e.localizedMessage,
                         NotificationType.ERROR,
-                        null,
                     )
             }
         }
