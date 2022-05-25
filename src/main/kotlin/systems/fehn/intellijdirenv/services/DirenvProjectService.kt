@@ -16,6 +16,7 @@ import com.intellij.openapi.project.guessProjectDir
 import com.intellij.openapi.vfs.VirtualFile
 import systems.fehn.intellijdirenv.MyBundle
 import systems.fehn.intellijdirenv.notificationGroup
+import systems.fehn.intellijdirenv.settings.DirenvSettingsState
 import systems.fehn.intellijdirenv.switchNull
 
 class DirenvProjectService(private val project: Project) {
@@ -140,8 +141,14 @@ class DirenvProjectService(private val project: Project) {
     private fun executeDirenv(envrcFile: VirtualFile, vararg args: String): Process {
         val workingDir = envrcFile.parent.path
 
-        return GeneralCommandLine("direnv", *args)
+        val cli = GeneralCommandLine("direnv", *args)
             .withWorkDirectory(workingDir)
-            .createProcess()
+
+        val appSettings = DirenvSettingsState.getInstance()
+        if (appSettings.direnvSettingsPath.isNotEmpty()) {
+            cli.withExePath(appSettings.direnvSettingsPath)
+        }
+
+        return cli.createProcess()
     }
 }
