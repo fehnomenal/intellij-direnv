@@ -35,4 +35,6 @@
                     relative-to-action="SynchronizeCurrentFile"/>
     </action>
   </actions>
+
+  <depends optional="true" config-file="direnv-go.xml">org.jetbrains.plugins.go</depends>
 </idea-plugin>
