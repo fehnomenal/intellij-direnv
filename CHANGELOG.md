@@ -3,6 +3,9 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+### Added
+- New settings screen to customize the path to the direnv executable
+
 ### Changed
 - Version range now includes 2022.2
 

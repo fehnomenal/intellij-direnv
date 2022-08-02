@@ -7,6 +7,10 @@
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <applicationConfigurable parentId="tools" instance="systems.fehn.intellijdirenv.settings.DirenvSettingsConfigurable"
+                             id="systems.fehn.intellijdirenv.settings.DirenvSettingsConfigurable"
+                             displayName="Direnv Settings" />
+    <applicationService serviceImplementation="systems.fehn.intellijdirenv.settings.DirenvSettingsState" />
     <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.EnvironmentService"/>
     <projectService serviceImplementation="systems.fehn.intellijdirenv.services.DirenvProjectService"/>
   </extensions>
