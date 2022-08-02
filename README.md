@@ -48,9 +48,7 @@ The gradle plugins downloads JetBrains' JRE and fails to execute it.
 Add the following in `build.gradle.kts`:
 ```kotlin
 tasks.withType<org.jetbrains.intellij.tasks.RunIdeBase> {
-    conventionMapping("executable") {
-        org.gradle.internal.jvm.Jvm.current().javaExecutable.absolutePath
-    }
+    projectExecutable.set(org.gradle.internal.jvm.Jvm.current().javaExecutable.absolutePath)
 }
 ```
 
