@@ -1,10 +1,9 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin url="https://github.com/fehnomenal/intellij-direnv">
   <id>systems.fehn.intellijdirenv</id>
   <name>Direnv integration</name>
   <vendor>fehnomenal</vendor>
 
-  <!-- Product and plugin compatibility requirements -->
-  <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
   <depends>com.intellij.modules.platform</depends>
 
   <extensions defaultExtensionNs="com.intellij">

@@ -98,3 +98,6 @@ ij_kotlin_wrap_first_method_in_call_chain = false
 
 [*.xml]
 indent_size = 2
+
+[*.yml]
+indent_size = 2
