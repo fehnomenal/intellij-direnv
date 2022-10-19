@@ -3,6 +3,8 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+
+## [0.2.5]
 ### Added
 - New settings screen to customize the path to the direnv executable
 
@@ -42,7 +44,6 @@
 - Version range now includes 2020.4
 
 ## [0.1.1]
-
 ### Changed
 - The `direnv` executable is no longer looked up in `PATH`. Instead, Java is responsible for this.
 
@@ -58,10 +59,8 @@
 ### Fixed
 - Changed environment is propagated correctly to direnv
 
-### Security
 ## [0.0.3]
 - Add the official icon and action icon
-
 
 ## [0.0.1] - 2020-10-27
 - Initial release
