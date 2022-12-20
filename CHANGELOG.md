@@ -3,6 +3,8 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+- Version range now includes 2022.3
+- Apply `build.gradle.kts` changes from template v1.3.0
 
 ## [0.2.5]
 ### Added
