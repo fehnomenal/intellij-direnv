@@ -23,7 +23,7 @@
   <actions>
     <action id="Direnv.import.ToolBar"
             class="systems.fehn.intellijdirenv.DirenvImportAction"
-            text="Import direnv"
+            text="Import Direnv"
             description="Run direnv and import changes in the environment"
             icon="/META-INF/actionIcon.png">
       <add-to-group group-id="MainToolBar"
