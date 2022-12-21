@@ -3,6 +3,7 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+- Remove 2020.2 & 2020.3 due to compatibility problems
 - Version range now includes 2022.3
 - Apply changes from [template v1.3.0](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.3.0)
 
