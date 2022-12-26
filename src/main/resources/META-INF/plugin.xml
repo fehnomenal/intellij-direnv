@@ -11,14 +11,12 @@
                              id="systems.fehn.intellijdirenv.settings.DirenvSettingsConfigurable"
                              displayName="Direnv Settings" />
     <applicationService serviceImplementation="systems.fehn.intellijdirenv.settings.DirenvSettingsState" />
-    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.EnvironmentService"/>
-    <projectService serviceImplementation="systems.fehn.intellijdirenv.services.DirenvProjectService"/>
-  </extensions>
+    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.EnvironmentService" />
+    <projectService serviceImplementation="systems.fehn.intellijdirenv.services.DirenvProjectService" />
 
-  <applicationListeners>
-    <listener class="systems.fehn.intellijdirenv.listeners.MyProjectManagerListener"
-              topic="com.intellij.openapi.project.ProjectManagerListener"/>
-  </applicationListeners>
+    <notificationGroup id="Direnv" displayType="BALLOON" />
+    <postStartupActivity implementation="systems.fehn.intellijdirenv.MyStartupActivity" />
+  </extensions>
 
   <actions>
     <action id="Direnv.import.ToolBar"
@@ -28,10 +26,10 @@
             icon="/META-INF/actionIcon.png">
       <add-to-group group-id="MainToolBar"
                     anchor="after"
-                    relative-to-action="Synchronize"/>
+                    relative-to-action="Synchronize" />
       <add-to-group group-id="ProjectViewPopupMenu"
                     anchor="after"
-                    relative-to-action="SynchronizeCurrentFile"/>
+                    relative-to-action="SynchronizeCurrentFile" />
     </action>
   </actions>
 </idea-plugin>

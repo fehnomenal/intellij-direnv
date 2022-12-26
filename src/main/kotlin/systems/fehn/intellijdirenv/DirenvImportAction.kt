@@ -1,7 +1,6 @@
 package systems.fehn.intellijdirenv
 
 import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.actionSystem.ActionPlaces
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
@@ -42,10 +41,11 @@ class DirenvImportAction : AnAction(MyBundle.message("importDirenvAction")) {
                 val notification = notificationGroup
                     .createNotification(
                         MyBundle.message("noTopLevelEnvrcFileFound"),
+                        "",
                         NotificationType.ERROR,
                     )
 
-                Notifications.Bus.notify(notification, project)
+                notification.notify(project)
             }
 
             ActionPlaces.PROJECT_VIEW_POPUP -> {

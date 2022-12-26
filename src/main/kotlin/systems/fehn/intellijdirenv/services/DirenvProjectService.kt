@@ -6,7 +6,6 @@ import com.fasterxml.jackson.core.JsonToken
 import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
-import com.intellij.notification.Notifications
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
@@ -55,12 +54,14 @@ class DirenvProjectService(private val project: Project) {
                     notificationGroup
                         .createNotification(
                             MyBundle.message("executedSuccessfully"),
+                            "",
                             NotificationType.INFORMATION,
                         )
                 } else {
                     notificationGroup
                         .createNotification(
                             MyBundle.message("alreadyUpToDate"),
+                            "",
                             NotificationType.INFORMATION,
                         )
                 }
@@ -74,7 +75,7 @@ class DirenvProjectService(private val project: Project) {
             }
         }
 
-        Notifications.Bus.notify(notification, project)
+        notification.notify(project)
     }
 
     private fun handleDirenvOutput(parser: JsonParser): Boolean {
@@ -104,6 +105,7 @@ class DirenvProjectService(private val project: Project) {
             notificationGroup
                 .createNotification(
                     MyBundle.message("envrcNotYetAllowed"),
+                    "",
                     NotificationType.WARNING,
                 )
                 .addAction(
@@ -120,21 +122,20 @@ class DirenvProjectService(private val project: Project) {
             notificationGroup
                 .createNotification(
                     MyBundle.message("errorDuringDirenv"),
+                    "",
                     NotificationType.ERROR,
                 )
         }
 
-        Notifications.Bus.notify(
-            notification
-                .addAction(
-                    NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
-                        it.hideBalloon()
+        notification
+            .addAction(
+                NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
+                    it.hideBalloon()
 
-                        FileEditorManager.getInstance(project).openFile(envrcFile, true, true)
-                    },
-                ),
-            project,
-        )
+                    FileEditorManager.getInstance(project).openFile(envrcFile, true, true)
+                },
+            )
+            .notify(project)
     }
 
     private fun executeDirenv(envrcFile: VirtualFile, vararg args: String): Process {

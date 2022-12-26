@@ -1,6 +1,8 @@
 package systems.fehn.intellijdirenv
 
+import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationGroup
+import com.intellij.notification.NotificationDisplayType
 
 fun <T : Any> T?.switchNull(
     onNull: (() -> Unit)? = null,
@@ -13,4 +15,4 @@ fun <T : Any> T?.switchNull(
     }
 }
 
-val notificationGroup = NotificationGroup.balloonGroup("Direnv")
+val notificationGroup = NotificationGroupManager.getInstance().getNotificationGroup("Direnv")
