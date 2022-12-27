@@ -24,7 +24,7 @@ class MyStartupActivity : StartupActivity, DumbAware {
                   NotificationType.INFORMATION,
               )
               .addAction(
-                  NotificationAction.create(MyBundle.message("importDirenvAction")) { _, notification ->
+                  NotificationAction.create(MyBundle.message("importDirenvStartupMessage")) { _, notification ->
                       notification.hideBalloon()
 
                       projectService.importDirenv(it)
