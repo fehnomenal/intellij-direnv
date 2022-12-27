@@ -2,7 +2,6 @@ package systems.fehn.intellijdirenv
 
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationGroup
-import com.intellij.notification.NotificationDisplayType
 
 fun <T : Any> T?.switchNull(
     onNull: (() -> Unit)? = null,
