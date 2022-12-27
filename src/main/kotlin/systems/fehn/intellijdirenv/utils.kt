@@ -15,4 +15,4 @@ fun <T : Any> T?.switchNull(
     }
 }
 
-val notificationGroup = NotificationGroupManager.getInstance().getNotificationGroup("Direnv")
+val notificationGroup: NotificationGroup = NotificationGroupManager.getInstance().getNotificationGroup("Direnv")
