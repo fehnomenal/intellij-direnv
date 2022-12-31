@@ -3,11 +3,14 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+
+## [0.2.6] - 2022-12-31
 - Remove 2020.2 & 2020.3 due to compatibility problems
 - Version range now includes 2022.3
 - Apply changes from [template v1.3.0](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.3.0)
 
 ## [0.2.5]
+
 ### Added
 - New settings screen to customize the path to the direnv executable
 
@@ -15,23 +18,28 @@
 - Version range now includes 2022.2
 
 ## [0.2.4]
+
 ### Changed
 - Make compatible with 2022.1
 
 ## [0.2.3]
+
 ### Changed
 - Make compatible with 2021.3.1
 
 ## [0.2.2]
+
 ### Changed
 - Make compatible with 2021.2
 - Apply changes from template v0.10.1
 
 ## [0.2.1]
+
 ### Changed
 - Make compatible with 2021.1
 
 ## [0.2.0]
+
 ### Added
 - Allow importing non-toplevel `.envrc` files
 
@@ -39,18 +47,22 @@
 - Toolbar action is always visible and enabled
 
 ## [0.1.3]
+
 ### Changed
 - Remove 2019.3 due to compatibility problems
 
 ## [0.1.2]
+
 ### Changed
 - Version range now includes 2020.4
 
 ## [0.1.1]
+
 ### Changed
 - The `direnv` executable is no longer looked up in `PATH`. Instead, Java is responsible for this.
 
 ## [0.1.0]
+
 ### Added
 - On project load a popup suggests importing from direnv
 - Document that only top-level `.envrc` files are handled
@@ -67,3 +79,18 @@
 
 ## [0.0.1] - 2020-10-27
 - Initial release
+
+[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.6...HEAD
+[0.2.6]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.5...v0.2.6
+[0.2.5]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.4...v0.2.5
+[0.2.4]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.3...v0.2.4
+[0.2.3]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.2...v0.2.3
+[0.2.2]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/fehnomenal/intellij-direnv/compare/v0.1.3...v0.2.0
+[0.1.3]: https://github.com/fehnomenal/intellij-direnv/compare/v0.1.2...v0.1.3
+[0.1.2]: https://github.com/fehnomenal/intellij-direnv/compare/v0.1.1...v0.1.2
+[0.1.1]: https://github.com/fehnomenal/intellij-direnv/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/fehnomenal/intellij-direnv/compare/v0.0.3...v0.1.0
+[0.0.3]: https://github.com/fehnomenal/intellij-direnv/compare/v0.0.1...v0.0.3
+[0.0.1]: https://github.com/fehnomenal/intellij-direnv/commits/v0.0.1
