@@ -3,7 +3,8 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
-
+- Version range now includes 2023.1
+- 
 ## [0.2.6] - 2022-12-31
 - Remove 2020.2 & 2020.3 due to compatibility problems
 - Version range now includes 2022.3
