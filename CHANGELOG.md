@@ -3,8 +3,10 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+
+## [0.2.7] - 2023-04-10
 - Version range now includes 2023.1
-- 
+
 ## [0.2.6] - 2022-12-31
 - Remove 2020.2 & 2020.3 due to compatibility problems
 - Version range now includes 2022.3
@@ -81,7 +83,8 @@
 ## [0.0.1] - 2020-10-27
 - Initial release
 
-[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.6...HEAD
+[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.7...HEAD
+[0.2.7]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.6...v0.2.7
 [0.2.6]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.5...v0.2.6
 [0.2.5]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.4...v0.2.5
 [0.2.4]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.3...v0.2.4
