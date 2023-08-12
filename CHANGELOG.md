@@ -3,6 +3,7 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+- Version range now includes 2023.2
 
 ## [0.2.7] - 2023-04-10
 - Version range now includes 2023.1
