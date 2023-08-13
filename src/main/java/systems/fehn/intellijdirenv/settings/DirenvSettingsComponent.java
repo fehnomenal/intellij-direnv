@@ -2,6 +2,7 @@ package systems.fehn.intellijdirenv.settings;
 
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.ui.components.JBCheckBox;
 import com.intellij.util.ui.FormBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,6 +11,8 @@ import javax.swing.*;
 public class DirenvSettingsComponent {
     private final JPanel mainPanel;
     private final TextFieldWithBrowseButton direnvPath = new TextFieldWithBrowseButton();
+    private final JBCheckBox direnvImportOnStartup = new JBCheckBox("Automatically import any .envrc in the project root when the project is opened.");
+
 
     public DirenvSettingsComponent() {
         direnvPath.addBrowseFolderListener( "Direnv Path", "Path to the direnv file", null,
@@ -17,6 +20,7 @@ public class DirenvSettingsComponent {
         mainPanel = FormBuilder
                 .createFormBuilder()
                 .addLabeledComponent(new JLabel("DirenvPath: "), direnvPath, 1, false)
+                .addComponent(direnvImportOnStartup, 1)
                 .addComponentFillVertically(new JPanel(), 0)
                 .getPanel();
     }
@@ -36,5 +40,13 @@ public class DirenvSettingsComponent {
 
     public void setDirenvPath(@NotNull String path) {
         direnvPath.setText(path);
+    }
+
+    public boolean getDirenvImportOnStartup() {
+        return direnvImportOnStartup.isSelected();
+    }
+
+    public void setDirenvImportOnStartup(boolean newStatus) {
+        direnvImportOnStartup.setSelected(newStatus);
     }
 }

@@ -14,10 +14,10 @@ import org.jetbrains.annotations.Nullable;
 )
 public class DirenvSettingsState implements PersistentStateComponent<DirenvSettingsState> {
     public String direnvSettingsPath = "";
+    public Boolean direnvSettingsImportOnStartup = false;
 
     public static DirenvSettingsState getInstance() {
-        DirenvSettingsState instance = ApplicationManager.getApplication().getService(DirenvSettingsState.class);
-        return instance;
+        return ApplicationManager.getApplication().getService(DirenvSettingsState.class);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package systems.fehn.intellijdirenv.settings;
 
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,19 +29,21 @@ public class DirenvSettingsConfigurable implements Configurable {
     @Override
     public boolean isModified() {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
-        return !direnvSettingsComponent.getDirenvPath().equals(settings.direnvSettingsPath);
+        return !direnvSettingsComponent.getDirenvPath().equals(settings.direnvSettingsPath) || direnvSettingsComponent.getDirenvImportOnStartup() != settings.direnvSettingsImportOnStartup;
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
         settings.direnvSettingsPath = direnvSettingsComponent.getDirenvPath();
+        settings.direnvSettingsImportOnStartup = direnvSettingsComponent.getDirenvImportOnStartup();
     }
 
     @Override
     public void reset() {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
         direnvSettingsComponent.setDirenvPath(settings.direnvSettingsPath);
+        direnvSettingsComponent.setDirenvImportOnStartup(settings.direnvSettingsImportOnStartup);
     }
 
     @Override
