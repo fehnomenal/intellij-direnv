@@ -1,13 +1,20 @@
 package systems.fehn.intellijdirenv.services
 
 import systems.fehn.intellijdirenv.MyBundle
+import systems.fehn.intellijdirenv.settings.DirenvSettingsState
 
 class EnvironmentService {
     fun unsetVariable(name: String) {
+        val appSettings = DirenvSettingsState.getInstance()
+
+        appSettings.direnvVars.remove(name)
         modifiableEnvironment.remove(name)
     }
 
     fun setVariable(name: String, value: String) {
+        val appSettings = DirenvSettingsState.getInstance()
+
+        appSettings.direnvVars[name] = value
         modifiableEnvironment[name] = value
     }
 

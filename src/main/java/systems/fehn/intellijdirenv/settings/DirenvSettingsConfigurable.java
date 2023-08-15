@@ -23,7 +23,11 @@ public class DirenvSettingsConfigurable implements Configurable {
 
     @Override
     public @Nullable JComponent createComponent() {
+        DirenvSettingsState settings = DirenvSettingsState.getInstance();
+
         direnvSettingsComponent = new DirenvSettingsComponent();
+        direnvSettingsComponent.updateDirenvVars(settings.getDirenvVars());
+
         return direnvSettingsComponent.getPanel();
     }
 

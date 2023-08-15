@@ -8,16 +8,19 @@ import com.intellij.util.xmlb.XmlSerializerUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @State(
         name = "systems.fehn.intellijdirenv.settings.DirenvSettingsState",
         storages = @Storage("DirenvSettings.xml")
 )
 public class DirenvSettingsState implements PersistentStateComponent<DirenvSettingsState> {
     public String direnvSettingsPath = "";
+    private Map<String, String> direnvVars = new HashMap<>();
 
     public static DirenvSettingsState getInstance() {
-        DirenvSettingsState instance = ApplicationManager.getApplication().getService(DirenvSettingsState.class);
-        return instance;
+        return ApplicationManager.getApplication().getService(DirenvSettingsState.class);
     }
 
     @Override
@@ -28,5 +31,13 @@ public class DirenvSettingsState implements PersistentStateComponent<DirenvSetti
     @Override
     public void loadState(@NotNull DirenvSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
+    }
+
+    public Map<String, String> getDirenvVars() {
+        return this.direnvVars;
+    }
+
+    public void setDirenvVars(Map<String, String> direnvVars) {
+        this.direnvVars = direnvVars;
     }
 }
