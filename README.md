@@ -8,13 +8,20 @@
 <!-- Plugin description -->
 This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) into the Java process that is running the IDE.
 
-A button next to the `Reload All from Disk` action will start the process.
+To automatically load the `.envrc` file in the root of a project when you open it, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
+
+If you don't choose the automatic loading option, a popup notification will appear whenever a project with a `.envrc` file in the root is opened. You can load the `.envrc` file by clicking on the link in the notification. 
+
+To manually load an `.envrc` file: 
+- If you have the main toolbar enabled (<kbd>View</kbd> > <kbd>Appearance</kbd> > <kbd>Main Toolbar</kbd>), a button next to the <kbd>Reload All from Disk</kbd> action will start the process.
 
 ![action-icon](https://user-images.githubusercontent.com/9959940/98688979-b6c88700-236b-11eb-8e27-319f23376212.png)
 
-**Note**: This plugin handles only `.envrc` files in the project root automatically but you can manually import any `.envrc` file inside the project dir.
+- You can also right-click on any `.envrc` file and click <kbd>Import Direnv</kbd> to load its contents.   
 
-**Note**: You need `direnv` in your path.
+**Note**: This plugin handles only `.envrc` files in the project root automatically, but you can use the right click method to manually import any `.envrc` file that is in the project directory.
+
+**Note**: You need `direnv` in your path, or you can specify the location of your direnv executable in <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd>
 
 <!-- Plugin description end -->
 
