@@ -116,7 +116,7 @@ jobs:
 
       # Run tests
       - name: Run Tests
-        run: ./gradlew checks
+        run: ./gradlew check
 
       # Collect Tests Result of failed tests
       - name: Collect Tests Result
