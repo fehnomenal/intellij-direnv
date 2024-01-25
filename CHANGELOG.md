@@ -3,6 +3,7 @@
 # intellij-direnv Changelog
 
 ## [Unreleased]
+- Apply changes from [template v1.11.3](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.11.3)
 
 ## [0.2.8] - 2023-08-15
 - Version range now includes 2023.2
