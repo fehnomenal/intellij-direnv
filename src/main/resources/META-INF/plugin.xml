@@ -1,7 +1,7 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin url="https://github.com/fehnomenal/intellij-direnv">
   <id>systems.fehn.intellijdirenv</id>
-  <name>Direnv integration</name>
+  <name>Direnv Integration</name>
   <vendor>fehnomenal</vendor>
 
   <depends>com.intellij.modules.platform</depends>
@@ -13,9 +13,6 @@
                              id="systems.fehn.intellijdirenv.settings.DirenvSettingsConfigurable"
                              displayName="Direnv Settings" />
     <applicationService serviceImplementation="systems.fehn.intellijdirenv.settings.DirenvSettingsState" />
-    <applicationService serviceImplementation="systems.fehn.intellijdirenv.services.EnvironmentService" />
-    <projectService serviceImplementation="systems.fehn.intellijdirenv.services.DirenvProjectService" />
-
     <notificationGroup id="Direnv" displayType="BALLOON" />
     <postStartupActivity implementation="systems.fehn.intellijdirenv.MyStartupActivity" />
   </extensions>
@@ -34,4 +31,8 @@
                     relative-to-action="SynchronizeCurrentFile" />
     </action>
   </actions>
+  <projectListeners>
+      <listener class="systems.fehn.intellijdirenv.DirenvExecutionListener"
+                topic="com.intellij.execution.ExecutionListener" />
+  </projectListeners>
 </idea-plugin>

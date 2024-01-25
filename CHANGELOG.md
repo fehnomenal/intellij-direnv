@@ -6,6 +6,7 @@
 - Apply changes from [template v1.11.3](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.11.3)
 - Make the plugin compatible with all future versions (hopefully)
 - Remove old versions
+- Adds a configuration option to enable a reload of the .envrc every time a run configuration is executed.
 
 ## [0.2.8] - 2023-08-15
 - Version range now includes 2023.2

@@ -15,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public class DirenvSettingsState implements PersistentStateComponent<DirenvSettingsState> {
     public String direnvSettingsPath = "";
     public Boolean direnvSettingsImportOnStartup = false;
+    public Boolean direnvSettingsImportEveryExecution = false;
 
     public static DirenvSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(DirenvSettingsState.class);

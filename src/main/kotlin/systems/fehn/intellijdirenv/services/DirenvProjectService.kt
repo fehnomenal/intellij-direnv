@@ -7,6 +7,7 @@ import com.intellij.execution.configurations.GeneralCommandLine
 import com.intellij.notification.NotificationAction
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.logger
 import com.intellij.openapi.diagnostic.trace
 import com.intellij.openapi.fileEditor.FileEditorManager
@@ -18,6 +19,7 @@ import systems.fehn.intellijdirenv.notificationGroup
 import systems.fehn.intellijdirenv.settings.DirenvSettingsState
 import systems.fehn.intellijdirenv.switchNull
 
+@Service(Service.Level.PROJECT)
 class DirenvProjectService(private val project: Project) {
     private val logger by lazy { logger<DirenvProjectService>() }
 
@@ -37,7 +39,7 @@ class DirenvProjectService(private val project: Project) {
 
     private val jsonFactory by lazy { JsonFactory() }
 
-    fun importDirenv(envrcFile: VirtualFile) {
+    fun importDirenv(envrcFile: VirtualFile, notifyNoChange: Boolean = true) {
         val process = executeDirenv(envrcFile, "export", "json")
 
         if (process.waitFor() != 0) {
@@ -45,7 +47,7 @@ class DirenvProjectService(private val project: Project) {
             return
         }
 
-        val notification = jsonFactory.createParser(process.inputStream).use { parser ->
+        jsonFactory.createParser(process.inputStream).use { parser ->
 
             try {
                 val didWork = handleDirenvOutput(parser)
@@ -56,14 +58,14 @@ class DirenvProjectService(private val project: Project) {
                             MyBundle.message("executedSuccessfully"),
                             "",
                             NotificationType.INFORMATION,
-                        )
-                } else {
+                        ).notify(project)
+                } else if (notifyNoChange) {
                     notificationGroup
                         .createNotification(
                             MyBundle.message("alreadyUpToDate"),
                             "",
                             NotificationType.INFORMATION,
-                        )
+                        ).notify(project)
                 }
             } catch (e: EnvironmentService.ManipulateEnvironmentException) {
                 notificationGroup
@@ -71,11 +73,9 @@ class DirenvProjectService(private val project: Project) {
                         MyBundle.message("exceptionNotification"),
                         e.localizedMessage,
                         NotificationType.ERROR,
-                    )
+                    ).notify(project)
             }
         }
-
-        notification.notify(project)
     }
 
     private fun handleDirenvOutput(parser: JsonParser): Boolean {
