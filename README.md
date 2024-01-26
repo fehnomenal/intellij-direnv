@@ -8,10 +8,17 @@
 <!-- Plugin description -->
 This plugin provides an action to import environment variables from [direnv](https://github.com/direnv/direnv) into the Java process that is running the IDE.
 
-To automatically load the `.envrc` file in the root of a project when you open it, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
+### Automatic Import before every Run/Debug
+To automatically load the environment variables from a `<project_root>/.envrc` file before each and every execution of a Run/Debug configuration, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
 
-If you don't choose the automatic loading option, a popup notification will appear whenever a project with a `.envrc` file in the root is opened. You can load the `.envrc` file by clicking on the link in the notification. 
+On starting a Run/Debug job, a notification will show if the existing environment has been changed. The newly spawned process which executes the Run/Debug configuration will inherit the environment. If you often work with multiple project windows open in a single IDE instance, this is probably the best option for you.
 
+### Automatic Import on Startup
+To automatically load the environment variables from a `<project_root>/.envrc` file when you open the project, visit <kbd>Settings</kbd> > <kbd>Tools</kbd> > <kbd>Direnv Settings</kbd> and tick the relevant checkbox.
+
+If "Automatic Import on Startup" is disabled, a popup notification will appear whenever a project with a `.envrc` file in the root is opened. You can load the `.envrc` file by clicking on the link in the notification. 
+
+### Manual Import
 To manually load an `.envrc` file: 
 - If you have the main toolbar enabled (<kbd>View</kbd> > <kbd>Appearance</kbd> > <kbd>Main Toolbar</kbd>), a button next to the <kbd>Reload All from Disk</kbd> action will start the process.
 

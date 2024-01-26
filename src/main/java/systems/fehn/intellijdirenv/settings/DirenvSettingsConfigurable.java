@@ -29,7 +29,9 @@ public class DirenvSettingsConfigurable implements Configurable {
     @Override
     public boolean isModified() {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
-        return !direnvSettingsComponent.getDirenvPath().equals(settings.direnvSettingsPath) || direnvSettingsComponent.getDirenvImportOnStartup() != settings.direnvSettingsImportOnStartup;
+        return !direnvSettingsComponent.getDirenvPath().equals(settings.direnvSettingsPath) ||
+                direnvSettingsComponent.getDirenvImportOnStartup() != settings.direnvSettingsImportOnStartup ||
+                direnvSettingsComponent.getDirenvImportEveryExecution() != settings.direnvSettingsImportEveryExecution;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class DirenvSettingsConfigurable implements Configurable {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
         settings.direnvSettingsPath = direnvSettingsComponent.getDirenvPath();
         settings.direnvSettingsImportOnStartup = direnvSettingsComponent.getDirenvImportOnStartup();
+        settings.direnvSettingsImportEveryExecution = direnvSettingsComponent.getDirenvImportEveryExecution();
     }
 
     @Override
@@ -44,6 +47,7 @@ public class DirenvSettingsConfigurable implements Configurable {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
         direnvSettingsComponent.setDirenvPath(settings.direnvSettingsPath);
         direnvSettingsComponent.setDirenvImportOnStartup(settings.direnvSettingsImportOnStartup);
+        direnvSettingsComponent.setDirenvImportEveryExecution(settings.direnvSettingsImportEveryExecution);
     }
 
     @Override

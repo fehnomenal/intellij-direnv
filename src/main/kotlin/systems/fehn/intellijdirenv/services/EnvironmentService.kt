@@ -1,7 +1,9 @@
 package systems.fehn.intellijdirenv.services
 
+import com.intellij.openapi.components.Service
 import systems.fehn.intellijdirenv.MyBundle
 
+@Service
 class EnvironmentService {
     fun unsetVariable(name: String) {
         modifiableEnvironment.remove(name)
