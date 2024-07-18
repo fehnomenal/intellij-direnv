@@ -1,5 +1,9 @@
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
+import org.jetbrains.kotlin.konan.file.File
+import java.nio.file.Files
+import kotlin.io.path.Path
+import kotlin.jvm.optionals.getOrNull
 
 fun properties(key: String) = providers.gradleProperty(key)
 fun environment(key: String) = providers.environmentVariable(key)
@@ -83,7 +87,7 @@ tasks {
             val start = "<!-- Plugin description -->"
             val end = "<!-- Plugin description end -->"
 
-            with (it.lines()) {
+            with(it.lines()) {
                 if (!containsAll(listOf(start, end))) {
                     throw GradleException("Plugin description section not found in README.md:\n$start ... $end")
                 }
@@ -126,6 +130,21 @@ tasks {
         // The pluginVersion is based on the SemVer (https://semver.org) and supports pre-release labels, like 2.1.7-alpha.3
         // Specify pre-release label to publish the plugin in a custom Release Channel automatically. Read more:
         // https://plugins.jetbrains.com/docs/intellij/deployment.html#specifying-a-release-channel
-        channels = properties("pluginVersion").map { listOf(it.split('-').getOrElse(1) { "default" }.split('.').first()) }
+    }
+}
+
+tasks.withType<org.jetbrains.intellij.tasks.RunIdeBase> {
+    val osReleasePath = Path("/etc/os-release")
+    val systemName = osReleasePath.takeIf(Files::exists)?.let { File(it) }
+        ?.bufferedReader()
+        ?.lines()
+        ?.filter { it.startsWith("name", true) }
+        ?.findFirst()
+        ?.getOrNull()
+        ?.split("=")
+        ?.last()
+
+    if (systemName?.contentEquals("NixOS", true) == true) {
+        projectExecutable.set(org.gradle.internal.jvm.Jvm.current().javaExecutable.absolutePath)
     }
 }
