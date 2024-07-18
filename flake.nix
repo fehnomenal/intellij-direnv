@@ -4,10 +4,6 @@
       pkgs = nixpkgs.legacyPackages.x86_64-linux;
     in
     {
-      devShell.x86_64-linux = pkgs.mkShell {
-        buildInputs = [
-          pkgs.openjdk17
-        ];
-      };
+      devShell.x86_64-linux = import ./shell.nix { inherit pkgs; };
     };
 }
