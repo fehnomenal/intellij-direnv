@@ -1,6 +1,6 @@
 # direnv integration for JetBrains IDEs
 
-![Build](https://github.com/fehnomenal/intellij-direnv/workflows/Build/badge.svg)
+![Build](https://github.com/fehnomenal/intellij-direnv/actions/workflows/build.yml/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/15285.svg)](https://plugins.jetbrains.com/plugin/15285)
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/15285.svg)](https://plugins.jetbrains.com/plugin/15285)
 

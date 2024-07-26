@@ -5,6 +5,7 @@
 ## [Unreleased]
 
 - Remove upper version bound
+- Apply changes from [template v1.14.2](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.14.2)
 
 ## [0.2.9] - 2024-01-26
 
