@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.2.10] - 2024-07-27
+
 - Remove upper version bound
 - Apply changes from [template v1.14.2](https://github.com/JetBrains/intellij-platform-plugin-template/releases/tag/v1.14.2)
 
@@ -115,7 +117,8 @@
 
 - Initial release
 
-[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.9...HEAD
+[Unreleased]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.10...HEAD
+[0.2.10]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.9...v0.2.10
 [0.2.9]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.8...v0.2.9
 [0.2.8]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.7...v0.2.8
 [0.2.7]: https://github.com/fehnomenal/intellij-direnv/compare/v0.2.6...v0.2.7
