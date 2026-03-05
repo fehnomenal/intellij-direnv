@@ -1,3 +1,6 @@
+> [!CAUTION]
+> The plugin is no longer maintained and does not work in version 2025.3 (or earlier).
+
 # direnv integration for JetBrains IDEs
 
 ![Build](https://github.com/fehnomenal/intellij-direnv/actions/workflows/build.yml/badge.svg)
