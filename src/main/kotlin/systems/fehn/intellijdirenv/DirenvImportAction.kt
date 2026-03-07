@@ -1,13 +1,13 @@
 package systems.fehn.intellijdirenv
 
 import com.intellij.notification.NotificationType
-import com.intellij.openapi.actionSystem.ActionPlaces
-import com.intellij.openapi.actionSystem.AnAction
-import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.actionSystem.*
 import systems.fehn.intellijdirenv.services.DirenvProjectService
 
 class DirenvImportAction : AnAction(MyBundle.message("importDirenvAction")) {
+    override fun getActionUpdateThread(): ActionUpdateThread {
+        return ActionUpdateThread.BGT
+    }
     override fun update(e: AnActionEvent) {
         if (e.project == null) {
             e.presentation.isEnabledAndVisible = false
