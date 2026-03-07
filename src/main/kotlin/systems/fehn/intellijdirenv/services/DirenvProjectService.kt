@@ -18,6 +18,8 @@ import systems.fehn.intellijdirenv.MyBundle
 import systems.fehn.intellijdirenv.notificationGroup
 import systems.fehn.intellijdirenv.settings.DirenvSettingsState
 import systems.fehn.intellijdirenv.switchNull
+import java.nio.charset.StandardCharsets
+import java.util.concurrent.TimeUnit
 
 @Service(Service.Level.PROJECT)
 class DirenvProjectService(private val project: Project) {
@@ -42,12 +44,20 @@ class DirenvProjectService(private val project: Project) {
     fun importDirenv(envrcFile: VirtualFile, notifyNoChange: Boolean = true) {
         val process = executeDirenv(envrcFile, "export", "json")
 
-        if (process.waitFor() != 0) {
-            handleDirenvError(process, envrcFile)
+        val output = process.inputStream.readAllBytes().toString(StandardCharsets.UTF_8)
+
+        val timoutInSeconds = DirenvSettingsState.getInstance().direnvTimeout
+
+        if (!process.waitFor(timoutInSeconds!!.toLong(), TimeUnit.SECONDS)) {
+            handleTimeout(envrcFile)
             return
         }
 
-        jsonFactory.createParser(process.inputStream).use { parser ->
+        if (process.exitValue() != 0) {
+            handleDirenvError(process, envrcFile)
+        }
+
+        jsonFactory.createParser(output).use { parser ->
 
             try {
                 val didWork = handleDirenvOutput(parser)
@@ -91,7 +101,7 @@ class DirenvProjectService(private val project: Project) {
                 }
 
                 didWork = true
-                logger.trace { "Set variable ${parser.currentName} to ${parser.valueAsString}" }
+                logger.trace("Set variable ${parser.currentName} to ${parser.valueAsString}")
             }
         }
 
@@ -99,7 +109,7 @@ class DirenvProjectService(private val project: Project) {
     }
 
     private fun handleDirenvError(process: Process, envrcFile: VirtualFile) {
-        val error = process.errorStream.bufferedReader().readText()
+        val error = process.errorStream.readAllBytes().toString(StandardCharsets.UTF_8)
 
         val notification = if (error.contains(" is blocked")) {
             notificationGroup
@@ -128,6 +138,23 @@ class DirenvProjectService(private val project: Project) {
         }
 
         notification
+            .addAction(
+                NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
+                    it.hideBalloon()
+
+                    FileEditorManager.getInstance(project).openFile(envrcFile, true, true)
+                },
+            )
+            .notify(project)
+    }
+
+    private fun handleTimeout(envrcFile: VirtualFile) {
+        notificationGroup
+            .createNotification(
+                MyBundle.message("envrcTimeout"),
+                "",
+                NotificationType.WARNING,
+            )
             .addAction(
                 NotificationAction.create(MyBundle.message("openEnvrc")) { _, it ->
                     it.hideBalloon()
