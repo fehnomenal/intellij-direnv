@@ -31,7 +31,8 @@ public class DirenvSettingsConfigurable implements Configurable {
         DirenvSettingsState settings = DirenvSettingsState.getInstance();
         return !direnvSettingsComponent.getDirenvPath().equals(settings.direnvSettingsPath) ||
                 direnvSettingsComponent.getDirenvImportOnStartup() != settings.direnvSettingsImportOnStartup ||
-                direnvSettingsComponent.getDirenvImportEveryExecution() != settings.direnvSettingsImportEveryExecution;
+                direnvSettingsComponent.getDirenvImportEveryExecution() != settings.direnvSettingsImportEveryExecution ||
+                direnvSettingsComponent.getDirenvImportRecursive() != settings.direnvSettingsImportRecursive;
     }
 
     @Override
@@ -40,6 +41,7 @@ public class DirenvSettingsConfigurable implements Configurable {
         settings.direnvSettingsPath = direnvSettingsComponent.getDirenvPath();
         settings.direnvSettingsImportOnStartup = direnvSettingsComponent.getDirenvImportOnStartup();
         settings.direnvSettingsImportEveryExecution = direnvSettingsComponent.getDirenvImportEveryExecution();
+        settings.direnvSettingsImportRecursive = direnvSettingsComponent.getDirenvImportRecursive();
     }
 
     @Override
@@ -48,6 +50,7 @@ public class DirenvSettingsConfigurable implements Configurable {
         direnvSettingsComponent.setDirenvPath(settings.direnvSettingsPath);
         direnvSettingsComponent.setDirenvImportOnStartup(settings.direnvSettingsImportOnStartup);
         direnvSettingsComponent.setDirenvImportEveryExecution(settings.direnvSettingsImportEveryExecution);
+        direnvSettingsComponent.setDirenvImportRecursive(settings.direnvSettingsImportRecursive);
     }
 
     @Override

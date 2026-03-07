@@ -29,11 +29,21 @@ class DirenvProjectService(private val project: Project) {
         )
 
     val projectEnvrcFile: VirtualFile?
-        get() = projectDir?.findChild(".envrc")?.takeUnless { it.isDirectory }
+        get() = projectDir?.run(::findEnvrc)
             .switchNull(
                 onNull = { logger.trace { "Project ${project.name} contains no .envrc file" } },
                 onNonNull = { logger.trace { "Project ${project.name} has .envrc file ${it.path}" } },
             )
+
+    private val appSettings = DirenvSettingsState.getInstance()
+
+    private fun findEnvrc(dir: VirtualFile): VirtualFile? {
+        logger.trace { "Scanning ${dir.path} directory for .envrc" }
+        return dir
+            .findChild(".envrc")
+            ?.takeUnless { it.isDirectory }
+            ?: if (appSettings.direnvSettingsImportRecursive) dir.parent?.takeIf { it.isDirectory }?.run(::findEnvrc) else null
+    }
 
     private val envService by lazy { ApplicationManager.getApplication().getService(EnvironmentService::class.java) }
 

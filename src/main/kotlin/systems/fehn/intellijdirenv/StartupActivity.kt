@@ -32,7 +32,7 @@ class MyStartupActivity : StartupActivity, DumbAware {
         val notification = notificationGroup
             .createNotification(
                 MyBundle.message("envrcFileFound"),
-                "",
+                it.path,
                 NotificationType.INFORMATION,
             )
             .addAction(
